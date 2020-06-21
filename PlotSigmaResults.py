@@ -1,36 +1,12 @@
 #!/usr/bin/env python
+
 import scipy
 from scipy.io import loadmat
-from scipy import signal
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from scipy.ndimage import gaussian_filter
 
-
-def get_gaussian_distribution(sigma):
-    half_width = 3 * sigma
-    grid_numbers = np.array(range(-half_width, half_width + 1))
-    xx, yy = np.meshgrid(grid_numbers, grid_numbers)
-    gaussian_distribution = np.exp(-1/(2*sigma ^ 2)
-                                   * (np.power(xx, 2) + np.power(yy, 2)))
-    return gaussian_distribution
-
-
-def get_saliency_map(gaze_image, sigma):
-    gaussian_distribution = get_gaussian_distribution(sigma)
-    saliency_map = signal.convolve2d(
-        gaze_image, gaussian_distribution, boundary='symm', mode='same')
-    saliency_map /= saliency_map.max()
-    return saliency_map
-
-
-def show_save_image(img, output_path):
-    fig, ax = plt.subplots()
-    ax.imshow(img, cmap='gray', vmin=0, vmax=1)
-    ax.axis('off')
-    fig.savefig(output_path)
-    plt.show()
+import SaliencyLib
 
 
 def get_sigma_max_score(metric_scores, metric_number):
@@ -102,10 +78,10 @@ def main():
         metric_scores = scores[:, metric_number]
         plot_save_metric_scores(metric_scores, output_path, metric_number)
 
-        # output_path = 'saliency_map_' + str(metric_number) + '.pdf'
-        # sigma = get_sigma_max_score(metric_scores, metric_number)[0]
-        # saliency_map = get_saliency_map(gaze_image, sigma)
-        # show_save_image(saliency_map, output_path)
+        output_path = 'saliency_map_' + str(metric_number) + '.pdf'
+        sigma = get_sigma_max_score(metric_scores, metric_number)[0]
+        saliency_map = SaliencyLib.get_saliency_map(gaze_image, sigma)
+        SaliencyLib.show_save_image(saliency_map, output_path)
 
 
 if __name__ == '__main__':
