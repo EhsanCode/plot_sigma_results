@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 
 import SaliencyLib
 
-resize_factor = 4
+resize_factor = 1
 
 def main():
-    file_path = '061.mat'
-    image_file_path = '061.jpg'
+    file_path = 'data/061.mat'
+    image_file_path = 'images/061.jpg'
     mat = loadmat(file_path)
     gaze_image = mat['fixLocs']
     full_size = np.array(gaze_image.shape)
@@ -24,7 +24,7 @@ def main():
         j=gaze_indices[1][indice]
         gaze_image_resize[i][j] = 1
 
-    sigmas = [50]
+    sigmas = [500]
     for sigma in sigmas:
         print(sigma)
         output_path = 'color_saliency_sigma_s_' + str(sigma ) + '.png'        

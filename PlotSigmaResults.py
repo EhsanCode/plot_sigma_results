@@ -67,7 +67,7 @@ def plot_save_metric_scores(metric_scores, output_path, metric_number):
 
 
 def main():
-    file_path = 'RANDOM_360x640_NP_100_d_20_NC_2.mat'
+    file_path = 'data\RANDOM_360x640_NP_100_d_20_NC_2.mat'
     mat = loadmat(file_path)
     mat_data = mat['results']
     scores = mat_data['scores'][0, 0][0]
