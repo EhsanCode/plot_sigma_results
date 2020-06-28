@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+
 
 import scipy
 from scipy.io import loadmat
@@ -12,6 +12,7 @@ resize_factor = 4
 
 def main():
     file_path = '061.mat'
+    image_file_path = '061.jpg'
     mat = loadmat(file_path)
     gaze_image = mat['fixLocs']
     full_size = np.array(gaze_image.shape)
@@ -23,10 +24,21 @@ def main():
         j=gaze_indices[1][indice]
         gaze_image_resize[i][j] = 1
 
-    for sigma in range(5, 251, 5):
-        output_path = 'saliency_sigma_s_' + str(sigma ) + '.png'        
+    sigmas = [50]
+    for sigma in sigmas:
+        print(sigma)
+        output_path = 'color_saliency_sigma_s_' + str(sigma ) + '.png'        
         saliency_map = SaliencyLib.get_saliency_map(gaze_image_resize, sigma)
-        SaliencyLib.show_save_image(saliency_map, output_path)
+        image = plt.imread(image_file_path) / 255.0
+        # image = np.resize(image, heat_map_image.shape)
+        # image = np.zeros(heat_map_image.shape)
+        image_heatmap = SaliencyLib.apply_heatmap(image, saliency_map)
+    
+        fig, ax = plt.subplots()
+        ax.imshow(image_heatmap, vmin=0, vmax=1)
+        ax.axis('off')
+        plt.show()
+        #SaliencyLib.show_save_image(saliency_map, output_path)
 
 
 if __name__ == '__main__':

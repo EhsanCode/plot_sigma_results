@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import scipy
 from scipy.io import loadmat
